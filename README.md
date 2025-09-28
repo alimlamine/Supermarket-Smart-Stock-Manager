@@ -59,16 +59,8 @@ You're done with the technical part! You only need to do this once.
 The AI reads data from a **CSV (Comma-Separated Values)** file. This is a very common format that you can easily export from most spreadsheet programs like Microsoft Excel or Google Sheets.
 
 **Your CSV file MUST have:**
-1.  A **header row** at the top that describes each column (e.g., `ProductID`, `ProductName`, `Category`, `Price`, `StockQuantity`).
+1.  A **header row** at the top that describes each column .
 2.  Data where values are separated by commas.
-
-**Example:**
-```csv
-ProductID,ProductName,Category,Price,InStock,MonthlySales
-101,Organic Milk,Dairy,4.50,150,800
-203,Avocado,Produce,1.99,200,1200
-512,Whole Wheat Bread,Bakery,3.25,80,950
-```
 
 To create this file:
 - In **Google Sheets**, go to `File > Download > Comma-separated values (.csv)`.
