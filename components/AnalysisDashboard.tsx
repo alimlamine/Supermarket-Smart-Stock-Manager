@@ -5,6 +5,7 @@ import { analyzeProductData, AuthenticationError } from '../services/geminiServi
 import VisualizationRenderer from './VisualizationRenderer';
 import Loader from './Loader';
 import { useTranslation } from 'react-i18next';
+import VoiceSearch from './VoiceSearch';
 
 interface AnalysisDashboardProps {
   csvData: string;
@@ -43,6 +44,8 @@ const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ csvData, fileName
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [query, setQuery] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [voiceTranscript, setVoiceTranscript] = useState<string>('');
+    const [voiceSearchLanguage, setVoiceSearchLanguage] = useState<string>('en-US');
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const { t, i18n } = useTranslation();
 
@@ -61,17 +64,33 @@ const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ csvData, fileName
         ]);
     }, [csvData, fileName, t]);
 
-    const handleQuerySubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!query.trim() || isLoading) return;
+    useEffect(() => {
+      if (voiceTranscript) {
+        handleQuerySubmit(null, voiceTranscript);
+        setVoiceTranscript(''); // Clear transcript after submission
+      }
+    }, [voiceTranscript]);
 
-        const userMessage: ChatMessage = { role: 'user', content: query };
+    const handleVoiceTranscript = (transcript: string) => {
+      setVoiceTranscript(transcript);
+    };
+
+    const handleVoiceLanguageChange = (lang: string) => {
+      setVoiceSearchLanguage(lang);
+    };
+
+    const handleQuerySubmit = async (e: React.FormEvent | null, transcript: string | null = null) => {
+        e?.preventDefault();
+        const currentQuery = transcript || query;
+        if (!currentQuery.trim() || isLoading) return;
+
+        const userMessage: ChatMessage = { role: 'user', content: currentQuery };
         setMessages(prev => [...prev, userMessage]);
         setQuery('');
         setIsLoading(true);
 
         try {
-            const { explanation, visualization } = await analyzeProductData(csvData, query, i18n.language, apiKey);
+            const { explanation, visualization } = await analyzeProductData(csvData, currentQuery, i18n.language, apiKey);
             const modelMessage: ChatMessage = {
                 role: 'model',
                 content: explanation,
@@ -119,6 +138,7 @@ const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ csvData, fileName
 
             <div className="p-4 border-t border-secondary/50 bg-surface/30">
                 <form onSubmit={handleQuerySubmit} className="flex items-center gap-4">
+                    <VoiceSearch onTranscript={handleVoiceTranscript} onLanguageChange={handleVoiceLanguageChange} />
                     <input
                         type="text"
                         value={query}
@@ -127,7 +147,7 @@ const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ csvData, fileName
                         className="flex-1 bg-background/70 border border-secondary rounded-full py-3 px-5 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                         disabled={isLoading}
                     />
-                    <button type="submit" disabled={isLoading || !query.trim()} className="bg-primary text-white p-3 rounded-full disabled:bg-secondary disabled:cursor-not-allowed hover:bg-violet-500 transition-all transform hover:scale-110 shadow-lg shadow-primary/30 hover:shadow-primary/50">
+                    <button type="submit" disabled={isLoading || (!query.trim() && !voiceTranscript)} className="bg-primary text-white p-3 rounded-full disabled:bg-secondary disabled:cursor-not-allowed hover:bg-violet-500 transition-all transform hover:scale-110 shadow-lg shadow-primary/30 hover:shadow-primary/50">
                         <SendIcon className="w-6 h-6"/>
                     </button>
                 </form>

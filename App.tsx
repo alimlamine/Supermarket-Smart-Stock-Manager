@@ -72,6 +72,7 @@ const App: React.FC = () => {
                 handleClearKey();
                 setApiKeyError(errorMessage);
             }}
+            currentLanguage={i18n.language} // Pass the current i18n language
           />
         )}
       </main>
