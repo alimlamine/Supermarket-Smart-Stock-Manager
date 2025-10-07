@@ -20,8 +20,8 @@ For example, you can:
 - Ask the AI: "What are my top 5 best-selling products?"
 - Ask: "Which items are running low on stock?" (based on your latest edits)
 - Ask: "Show me a breakdown of sales by category."
-                And all that possible even with your voice !
-The AI will answer you in plain text and even create charts and tables to make the data easier to understand.
+- And all that is possible even with your voice !
+The AI will answer you in plain text and even create charts and tables to make the data easier to understand. 
 
 ## Key Features
 
