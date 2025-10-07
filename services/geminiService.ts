@@ -64,7 +64,7 @@ export const analyzeProductData = async (
     
     const lines = csvData.split(/\r?\n/).filter(line => line.trim() !== '');
     const header = lines[0];
-    const dataRows = lines.slice(1, 51); // Header + 50 rows of data
+    const dataRows = lines.slice(1, 101); // Header + 100 rows of data
     const csvSample = [header, ...dataRows].join('\n');
     
     const prompt = `

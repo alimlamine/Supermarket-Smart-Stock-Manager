@@ -1,8 +1,10 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface VoiceSearchProps {
   onTranscript: (transcript: string) => void;
+  disabled?: boolean;
 }
 
 const mapI18nToSpeechLang = (i18nLang: string): string => {
@@ -12,49 +14,77 @@ const mapI18nToSpeechLang = (i18nLang: string): string => {
   return 'en-US';
 };
 
-const VoiceSearch: React.FC<VoiceSearchProps> = ({ onTranscript }) => {
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
+
+interface SpeechRecognitionEvent extends Event {
+  results: {
+    isFinal: boolean;
+    [key: number]: {
+      transcript: string;
+    };
+  }[];
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+
+interface SpeechRecognition {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: SpeechRecognitionErrorEvent) => void;
+  onend: () => void;
+  start: () => void;
+  stop: () => void;
+}
+
+
+const VoiceSearch: React.FC<VoiceSearchProps> = ({ onTranscript, disabled }) => {
   const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState('');
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const [isSupported, setIsSupported] = useState(true);
   const { i18n } = useTranslation();
 
   useEffect(() => {
     const hasWebkit = 'webkitSpeechRecognition' in window;
-    const hasStandard = 'SpeechRecognition' in window as any;
+    const hasStandard = 'SpeechRecognition' in window;
     if (!hasWebkit && !hasStandard) {
       console.warn("Web Speech API is not supported by this browser.");
       setIsSupported(false);
       return;
     }
-    console.log('Initializing SpeechRecognition');
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-    recognitionRef.current = new SpeechRecognition();
-    recognitionRef.current.continuous = false;
-    recognitionRef.current.interimResults = false;
-    recognitionRef.current.lang = mapI18nToSpeechLang(i18n.language);
+    const SpeechRecognitionImpl = window.webkitSpeechRecognition || window.SpeechRecognition;
+    recognitionRef.current = new SpeechRecognitionImpl();
+    const recognition = recognitionRef.current;
+    
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = mapI18nToSpeechLang(i18n.language);
 
-    recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
-      console.log('Speech recognition result', event);
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const speechResult = event.results[0][0].transcript;
-      setTranscript(speechResult);
       onTranscript(speechResult);
     };
 
-    recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       console.error('Speech recognition error', event.error);
       setIsListening(false);
     };
 
-    recognitionRef.current.onend = () => {
-      console.log('Speech recognition ended');
+    recognition.onend = () => {
       setIsListening(false);
     };
 
     return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-        console.log('Speech recognition stopped on cleanup');
+      if (recognition) {
+        recognition.stop();
       }
     };
   }, [i18n.language, onTranscript]);
@@ -66,38 +96,48 @@ const VoiceSearch: React.FC<VoiceSearchProps> = ({ onTranscript }) => {
     }
   }, [i18n.language]);
 
-  const startListening = () => {
-    console.log('Attempting to start listening');
-    if (recognitionRef.current) {
-      setTranscript('');
-      recognitionRef.current.lang = mapI18nToSpeechLang(i18n.language);
-      recognitionRef.current.start();
-      setIsListening(true);
-      console.log('Started listening');
+  const toggleListening = () => {
+    if (!recognitionRef.current) return;
+
+    if (isListening) {
+        recognitionRef.current.stop();
+    } else {
+        recognitionRef.current.lang = mapI18nToSpeechLang(i18n.language);
+        recognitionRef.current.start();
+        setIsListening(true);
     }
   };
 
-  const stopListening = () => {
-    console.log('Attempting to stop listening');
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-      console.log('Stopped listening');
-    }
-  };
+
+  if (!isSupported) {
+    return (
+      <button 
+        type="button"
+        className="p-3 rounded-full bg-surface text-text-secondary cursor-not-allowed opacity-50" 
+        disabled
+        title="Voice search is not supported by your browser."
+        aria-label="Voice search not supported"
+      >
+        <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/><line x1="4" y1="4" x2="20" y2="20"/></svg>
+      </button>
+    );
+  }
 
   return (
-    <div className="flex items-center gap-2">
-      <button onClick={isListening ? stopListening : startListening} className={`p-2 rounded-full transition-all transform shadow-lg ${isListening ? 'bg-red-600 hover:bg-red-700 shadow-red-600/30 hover:shadow-red-600/50' : 'bg-primary hover:bg-violet-500 shadow-primary/30 hover:shadow-primary/50'} text-white disabled:bg-secondary disabled:cursor-not-allowed`} disabled={!isSupported}>
+    <button 
+        type="button"
+        onClick={toggleListening} 
+        className={`p-3 rounded-full transition-all transform ${isListening ? 'bg-red-600 hover:bg-red-700 shadow-lg shadow-red-600/30' : 'bg-primary hover:bg-violet-500 shadow-lg shadow-primary/30 hover:shadow-primary/50'} text-white disabled:bg-secondary disabled:cursor-not-allowed`} 
+        disabled={disabled}
+        aria-label={isListening ? 'Stop listening' : 'Start voice search'}
+        title={isListening ? 'Stop listening' : 'Start voice search'}
+    >
         {isListening ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
+          <svg className="w-6 h-6 animate-pulse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16" rx="2"/><rect x="14" y="4" width="4" height="16" rx="2"/></svg>
         ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+          <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
         )}
       </button>
-      {!isSupported && <p className="text-red-500 text-sm">Voice search not supported</p>}
-      {transcript && <p className="text-text-secondary text-sm">{transcript}</p>}
-    </div>
   );
 };
 

@@ -6,6 +6,7 @@ import VisualizationRenderer from './VisualizationRenderer';
 import Loader from './Loader';
 import StockManager from './StockManager';
 import { useTranslation } from 'react-i18next';
+import VoiceSearch from './VoiceSearch';
 
 interface AnalysisDashboardProps {
   initialData: DataObject[];
@@ -80,18 +81,17 @@ const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ initialData, head
         ]);
     }, [fileName, t]);
 
-    const handleQuerySubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!query.trim() || isLoading) return;
+    const submitQuery = async (currentQuery: string) => {
+        if (!currentQuery.trim() || isLoading) return;
 
-        const userMessage: ChatMessage = { role: 'user', content: query };
+        const userMessage: ChatMessage = { role: 'user', content: currentQuery };
         setMessages(prev => [...prev, userMessage]);
         setQuery('');
         setIsLoading(true);
 
         try {
             const currentCsvData = dataToCsvString(headers, productData);
-            const { explanation, visualization } = await analyzeProductData(currentCsvData, query, i18n.language, apiKey);
+            const { explanation, visualization } = await analyzeProductData(currentCsvData, currentQuery, i18n.language, apiKey);
             const modelMessage: ChatMessage = {
                 role: 'model',
                 content: explanation,
@@ -112,6 +112,16 @@ const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ initialData, head
         } finally {
             setIsLoading(false);
         }
+    };
+    
+    const handleQuerySubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        submitQuery(query);
+    };
+
+    const handleTranscript = (transcript: string) => {
+        setQuery(transcript);
+        submitQuery(transcript);
     };
 
     const TabButton: React.FC<{ tab: 'manage' | 'analyze', children: React.ReactNode }> = ({ tab, children }) => (
@@ -162,7 +172,7 @@ const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ initialData, head
                     </div>
 
                     <div className="p-4 border-t border-secondary/50 bg-surface/30">
-                        <form onSubmit={handleQuerySubmit} className="flex items-center gap-4">
+                        <form onSubmit={handleQuerySubmit} className="flex items-center gap-2">
                             <input
                                 type="text"
                                 value={query}
@@ -171,6 +181,7 @@ const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ initialData, head
                                 className="flex-1 bg-background/70 border border-secondary rounded-full py-3 px-5 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary"
                                 disabled={isLoading}
                             />
+                            <VoiceSearch onTranscript={handleTranscript} disabled={isLoading} />
                             <button type="submit" disabled={isLoading || !query.trim()} className="bg-primary text-white p-3 rounded-full disabled:bg-secondary disabled:cursor-not-allowed hover:bg-violet-500 transition-all transform hover:scale-110 shadow-lg shadow-primary/30 hover:shadow-primary/50">
                                 <SendIcon className="w-6 h-6"/>
                             </button>

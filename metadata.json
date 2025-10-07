@@ -1,5 +1,7 @@
 {
   "name": "Smart Stock Manager",
   "description": "An intelligent supermarket management dashboard that combines direct stock management with AI-powered analysis. Upload product data from a CSV file to view, edit, and manage inventory, and use the integrated AI chat to get instant insights, visualizations, and answers to your questions.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "microphone"
+  ]
 }
