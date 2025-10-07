@@ -3,7 +3,8 @@
 
 A powerful, AI-enhanced tool designed for supermarket owners and managers to directly manage their inventory and understand their data without needing technical skills. Upload your data, manage stock levels, and ask questions in plain language!
 
-<img width="1451" height="675" alt="image" src="https://github.com/user-attachments/assets/dc0be038-7b04-4d34-9a82-510cef2b91a7" />
+<img width="1504" height="685" alt="image" src="https://github.com/user-attachments/assets/6bdf07cb-e218-4517-b69d-7aa8885b2471" />
+
 
 ## What is this?
 
