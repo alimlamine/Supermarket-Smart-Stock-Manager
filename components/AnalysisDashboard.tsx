@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import type { ChatMessage, Visualization, DataObject } from '../types';
-import { analyzeProductData, AuthenticationError } from '../services/geminiService';
+import { analyzeProductData, AuthenticationError } from '../services/AI_Service';
 import VisualizationRenderer from './VisualizationRenderer';
 import Loader from './Loader';
 import StockManager from './StockManager';
