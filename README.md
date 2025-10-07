@@ -3,7 +3,9 @@
 
 A powerful, AI-enhanced tool designed for supermarket owners and managers to directly manage their inventory and understand their data without needing technical skills. Upload your data, manage stock levels, and ask questions in plain language!
 
-<img width="1451" height="675" alt="image" src="https://github.com/user-attachments/assets/dc0be038-7b04-4d34-9a82-510cef2b91a7" />
+<img width="1443" height="664" alt="image" src="https://github.com/user-attachments/assets/2b86e6b2-3c08-4811-9270-bcfc63b577f8" />
+
+
 
 ## What is this?
 
@@ -18,8 +20,8 @@ For example, you can:
 - Ask the AI: "What are my top 5 best-selling products?"
 - Ask: "Which items are running low on stock?" (based on your latest edits)
 - Ask: "Show me a breakdown of sales by category."
-
-The AI will answer you in plain text and even create charts and tables to make the data easier to understand.
+- And all that is possible even with your voice !
+The AI will answer you in plain text and even create charts and tables to make the data easier to understand. 
 
 ## Key Features
 
@@ -28,6 +30,7 @@ The AI will answer you in plain text and even create charts and tables to make t
 - **Direct Stock Editing**: Click and edit stock levels directly in the table.
 - **Export to CSV**: Download your modified inventory data with a single click.
 - **AI-Powered Chat**: Ask questions in plain English, French, or Arabic and get instant answers based on your current data.
+- **Voice Search**: Ask questions using your voice in English, French, or Arabic for a hands-free experience.
 - **Automatic Visualizations**: The AI automatically creates bar charts, pie charts, and tables to visualize your data.
 - **Multi-Language Support**: The entire interface and the AI's responses work in English, French, and Arabic.
 - **Secure & Private**: Your API key is stored securely in your browser for your session only, and your data is not saved by this application.
@@ -68,14 +71,6 @@ The AI reads data from a **CSV (Comma-Separated Values)** file. This is a very c
 **Your CSV file MUST have:**
 1.  A **header row** at the top that describes each column (e.g., `ProductID`, `ProductName`, `Category`, `Price`, `StockQuantity`).
 2.  Data where values are separated by commas.
-
-**Example:**
-```csv
-ProductID,ProductName,Category,Price,InStock,MonthlySales
-101,Organic Milk,Dairy,4.50,150,800
-203,Avocado,Produce,1.99,200,1200
-512,Whole Wheat Bread,Bakery,80,950
-```
 
 To create this file:
 - In **Google Sheets**, go to `File > Download > Comma-separated values (.csv)`.
