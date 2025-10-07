@@ -11,3 +11,7 @@ export interface ChatMessage {
   content: string;
   visualization?: Visualization;
 }
+
+export type DataObject = {
+  [key: string]: string | number;
+};

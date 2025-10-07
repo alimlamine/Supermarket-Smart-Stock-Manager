@@ -1,26 +1,33 @@
-# Supermarket AI Analyst 🛒
 
-A simple yet powerful tool designed to help supermarket owners and managers understand their sales and inventory data without needing any technical skills. Just upload your data, and ask questions in plain language!
+# Smart Stock Manager 🛒
+
+A powerful, AI-enhanced tool designed for supermarket owners and managers to directly manage their inventory and understand their data without needing technical skills. Upload your data, manage stock levels, and ask questions in plain language!
 
 <img width="1451" height="675" alt="image" src="https://github.com/user-attachments/assets/dc0be038-7b04-4d34-9a82-510cef2b91a7" />
 
-
 ## What is this?
 
-The Supermarket AI Analyst is your personal, Multi-Language, data expert. It takes a standard product file (like a CSV from your inventory system) and lets you chat with an AI that understands your data. You can quickly get insights, identify trends, and make better business decisions.
+The Smart Stock Manager is your personal data and inventory expert. It has two primary functions:
 
-For example, you can ask:
-- "What are my top 5 best-selling products?"
-- "Which items are running low on stock?"
-- "Show me a breakdown of sales by category."
-- "Give me a table of all dairy products."
+1.  **Stock Management**: It takes a standard product file (like a CSV from your inventory system) and displays it in an interactive table. You can search, sort, and directly edit stock quantities. When you're done, you can export your updated data as a new CSV file.
+2.  **AI Analyst**: It lets you chat with an AI that understands your data. You can quickly get insights, identify trends, and make better business decisions based on your live inventory data. Any changes you make in the stock manager are immediately reflected in the AI's analysis.
+
+For example, you can:
+- View your entire product list and search for specific items.
+- Click on a stock number, change it, and see the update instantly.
+- Ask the AI: "What are my top 5 best-selling products?"
+- Ask: "Which items are running low on stock?" (based on your latest edits)
+- Ask: "Show me a breakdown of sales by category."
 
 The AI will answer you in plain text and even create charts and tables to make the data easier to understand.
 
 ## Key Features
 
 - **Simple File Upload**: Securely upload your product data in the common CSV format.
-- **AI-Powered Chat**: Ask questions in plain English, French, or Arabic and get instant answers.
+- **Interactive Stock Table**: View, search, and sort your product data with ease.
+- **Direct Stock Editing**: Click and edit stock levels directly in the table.
+- **Export to CSV**: Download your modified inventory data with a single click.
+- **AI-Powered Chat**: Ask questions in plain English, French, or Arabic and get instant answers based on your current data.
 - **Automatic Visualizations**: The AI automatically creates bar charts, pie charts, and tables to visualize your data.
 - **Multi-Language Support**: The entire interface and the AI's responses work in English, French, and Arabic.
 - **Secure & Private**: Your API key is stored securely in your browser for your session only, and your data is not saved by this application.
@@ -59,20 +66,30 @@ You're done with the technical part! You only need to do this once.
 The AI reads data from a **CSV (Comma-Separated Values)** file. This is a very common format that you can easily export from most spreadsheet programs like Microsoft Excel or Google Sheets.
 
 **Your CSV file MUST have:**
-1.  A **header row** at the top that describes each column .
+1.  A **header row** at the top that describes each column (e.g., `ProductID`, `ProductName`, `Category`, `Price`, `StockQuantity`).
 2.  Data where values are separated by commas.
+
+**Example:**
+```csv
+ProductID,ProductName,Category,Price,InStock,MonthlySales
+101,Organic Milk,Dairy,4.50,150,800
+203,Avocado,Produce,1.99,200,1200
+512,Whole Wheat Bread,Bakery,80,950
+```
 
 To create this file:
 - In **Google Sheets**, go to `File > Download > Comma-separated values (.csv)`.
 - In **Microsoft Excel**, go to `File > Save As` and choose `CSV (Comma delimited)` from the format dropdown.
 
-### Step 3: Analyze Your Data!
+### Step 3: Manage and Analyze Your Data!
 
 Now for the easy part.
-1.  **Open the Supermarket AI Analyst app** in your web browser.
+1.  **Open the Smart Stock Manager app** in your web browser.
 2.  The app will first ask for your **API Key**. Paste the key you saved from Step 1.
 3.  You will see the **file upload screen**. Click "Browse File" and select the CSV file you prepared in Step 2.
-4.  **That's it!** The AI will load your file and greet you. You can now start asking questions in the chat box at the bottom.
+4.  **That's it!** The app will load your data into an interactive table.
+    *   Use the **"Stock Management"** tab to view, search, and edit your stock levels.
+    *   Switch to the **"AI Analyst"** tab to start asking questions about your data in the chat box.
 
 ---
 

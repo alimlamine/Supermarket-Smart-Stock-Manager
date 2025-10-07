@@ -62,8 +62,14 @@ const VisualizationRenderer: React.FC<VisualizationRendererProps> = ({ visualiza
                         fill="#8884d8"
                         dataKey={dataKey}
                         nameKey={nameKey}
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                        labelStyle={{ fill: '#f1f5f9', fontSize: '12px' }}
+                        // FIX: Replaced problematic `label` and `labelStyle` props with a custom label renderer.
+                        // This fixes the TypeScript error with `percent` multiplication and the invalid `labelStyle` prop
+                        // by returning a styled SVG <text> element, preserving functionality.
+                        label={({ name, percent, x, y }) => (
+                            <text x={x} y={y} fill="#f1f5f9" fontSize="12px" textAnchor="middle" dominantBaseline="central">
+                                {`${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
+                            </text>
+                        )}
                     >
                         {data.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke={COLORS[index % COLORS.length]} />

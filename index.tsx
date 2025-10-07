@@ -11,7 +11,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
   en: {
     translation: {
-      header: { title: "Supermarket AI Analyst" },
+      header: { title: "Smart Stock Manager" },
       fileUpload: {
         title: "Upload Your Supermarket Data",
         description: "Drag and drop your CSV file here or click to browse. The file should contain a header row with column names. The AI will adapt to your data structure.",
@@ -22,14 +22,20 @@ const resources = {
         exampleContent: "ProductID,ProductName,Category,Price,InStock,MonthlySales\n101,Organic Milk,Dairy,4.50,150,800\n203,Avocado,Produce,1.99,200,1200\n..."
       },
       dashboard: {
+        tabManage: "Stock Management",
+        tabAnalyze: "AI Analyst",
         chatTitle: "AI Analyst Chat",
         newFile: "Upload New File",
         you: "You",
         ai: "AI",
         analyzing: "Analyzing...",
         placeholder: "Ask about your products...",
-        initialGreeting: "Hello! I've successfully loaded your file \"{{fileName}}\". How can I help you analyze this data? \n\nHere are some questions you could ask:\n• What are the top 5 best-selling items?\n• Show me a breakdown by category.\n• Which products are low in stock?\n• Give me a table of all products from a specific supplier.",
+        initialGreeting: "Hello! I've successfully loaded your file \"{{fileName}}\". You can manage your stock in the 'Stock Management' tab or ask me questions here. \n\nHere are some questions you could ask:\n• What are the top 5 best-selling items?\n• Show me a breakdown by category.\n• Which products are low in stock?\n• Give me a table of all products from a specific supplier.",
         error: "I'm sorry, but I encountered an error. Please try again."
+      },
+      stockManager: {
+        searchPlaceholder: "Search products...",
+        exportCsv: "Export CSV"
       },
       visualization: {
         noData: "Not enough data to display visualization.",
@@ -42,7 +48,7 @@ const resources = {
   },
   fr: {
     translation: {
-      header: { title: "Analyste IA de Supermarché" },
+      header: { title: "Gestionnaire de Stock Intelligent" },
       fileUpload: {
         title: "Téléchargez vos Données de Supermarché",
         description: "Glissez-déposez votre fichier CSV ici ou cliquez pour parcourir. Le fichier doit contenir une ligne d'en-tête avec les noms de colonnes. L'IA s'adaptera à votre structure de données.",
@@ -53,14 +59,20 @@ const resources = {
         exampleContent: "IDProduit,NomProduit,Catégorie,Prix,EnStock,VentesMensuelles\n101,Lait Bio,Produits Laitiers,4.50,150,800\n203,Avocat,Fruits & Légumes,1.99,200,1200\n..."
       },
       dashboard: {
+        tabManage: "Gestion de Stock",
+        tabAnalyze: "Analyste IA",
         chatTitle: "Chat avec l'Analyste IA",
         newFile: "Nouveau Fichier",
         you: "Vous",
         ai: "IA",
         analyzing: "Analyse en cours...",
         placeholder: "Posez une question sur vos produits...",
-        initialGreeting: "Bonjour ! J'ai bien chargé votre fichier \"{{fileName}}\". Comment puis-je vous aider à analyser ces données ? \n\nVoici quelques questions que vous pourriez poser :\n• Quels sont les 5 articles les plus vendus ?\n• Montrez-moi une répartition par catégorie.\n• Quels produits ont un stock faible ?\n• Donnez-moi un tableau de tous les produits d'un fournisseur spécifique.",
+        initialGreeting: "Bonjour ! J'ai bien chargé votre fichier \"{{fileName}}\". Vous pouvez gérer votre stock dans l'onglet 'Gestion de Stock' ou me poser des questions ici. \n\nVoici quelques questions que vous pourriez poser :\n• Quels sont les 5 articles les plus vendus ?\n• Montrez-moi une répartition par catégorie.\n• Quels produits ont un stock faible ?\n• Donnez-moi un tableau de tous les produits d'un fournisseur spécifique.",
         error: "Désolé, j'ai rencontré une erreur. Veuillez réessayer."
+      },
+      stockManager: {
+        searchPlaceholder: "Rechercher des produits...",
+        exportCsv: "Exporter en CSV"
       },
       visualization: {
         noData: "Pas assez de données pour afficher la visualisation.",
@@ -73,7 +85,7 @@ const resources = {
   },
   ar: {
     translation: {
-      header: { title: "محلل الذكاء الاصطناعي للسوبر ماركت" },
+      header: { title: "مدير المخزون الذكي" },
       fileUpload: {
         title: "قم بتحميل بيانات السوبر ماركت الخاصة بك",
         description: "اسحب وأفلت ملف CSV الخاص بك هنا أو انقر للتصفح. يجب أن يحتوي الملف على صف رأس بأسماء الأعمدة. سيتكيف الذكاء الاصطناعي مع هيكل بياناتك.",
@@ -84,14 +96,20 @@ const resources = {
         exampleContent: "معرف المنتج,اسم المنتج,الفئة,السعر,في المخزون,المبيعات الشهرية\n101,حليب عضوي,ألبان,4.50,150,800\n203,أفوكادو,منتجات زراعية,1.99,200,1200\n..."
       },
       dashboard: {
+        tabManage: "إدارة المخزون",
+        tabAnalyze: "محلل الذكاء الاصطناعي",
         chatTitle: "محادثة مع محلل الذكاء الاصطناعي",
         newFile: "تحميل ملف جديد",
         you: "أنت",
         ai: "الذكاء الاصطناعي",
         analyzing: "جاري التحليل...",
         placeholder: "اسأل عن منتجاتك...",
-        initialGreeting: "أهلاً بك! لقد قمت بتحميل ملفك \"{{fileName}}\" بنجاح. كيف يمكنني مساعدتك في تحليل هذه البيانات؟ \n\nإليك بعض الأسئلة التي يمكنك طرحها:\n• ما هي أفضل 5 منتجات مبيعًا؟\n• أرني توزيعًا حسب الفئة.\n• ما هي المنتجات التي أوشكت على النفاد من المخزون؟\n• أعطني جدولاً بجميع المنتجات من مورد معين.",
+        initialGreeting: "أهلاً بك! لقد قمت بتحميل ملفك \"{{fileName}}\" بنجاح. يمكنك إدارة مخزونك في علامة التبويب 'إدارة المخزون' أو طرح الأسئلة علي هنا. \n\nإليك بعض الأسئلة التي يمكنك طرحها:\n• ما هي أفضل 5 منتجات مبيعًا؟\n• أرني توزيعًا حسب الفئة.\n• ما هي المنتجات التي أوشكت على النفاد من المخزون؟\n• أعطني جدولاً بجميع المنتجات من مورد معين.",
         error: "عذراً، لقد واجهت خطأ. يرجى المحاولة مرة أخرى."
+      },
+      stockManager: {
+        searchPlaceholder: "ابحث عن المنتجات...",
+        exportCsv: "تصدير كملف CSV"
       },
       visualization: {
         noData: "لا توجد بيانات كافية لعرض التمثيل البصري.",
